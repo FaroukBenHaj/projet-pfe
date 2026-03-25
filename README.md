@@ -27,7 +27,7 @@ the project  fills both gaps simultaneously.
 This project is built around a shared knowledge graph that sits at the center of the system. The Tester Agent builds it. The Client Agent reads from it.
 
 ```
-![Diagram global](Documents\Images\Global-diagram.gif)
+![Diagram global](Documents/Images/architecture.jpg)
 ```
 
 ### Core components
