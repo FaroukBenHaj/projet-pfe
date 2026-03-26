@@ -1,0 +1,9 @@
+services:
+  defectdojo:
+  authService:
+  kong:
+  testerAgent:
+  clientAgent:
+  mcpServer:
+  graphService:
+  ragService:
