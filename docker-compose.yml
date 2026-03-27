@@ -1,12 +1,6 @@
 services:
 #My project services :
-  authService:
-  kong:
-  testerAgent:
-  clientAgent:
-  mcpServer:
-  graphService:
-  ragService:
+
 #DEfectDojo's services 
 #Custom container
   nginx:
