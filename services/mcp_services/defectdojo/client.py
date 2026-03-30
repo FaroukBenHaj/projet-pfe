@@ -29,3 +29,50 @@ async def create_product_type(name: str, description: str = "",
         )
         return response.json()
        
+async def get_product_type_list():
+     async with httpx.AsyncClient() as client:
+        response = await client.get(
+            f"{DEFECTDOJO_API_URL}/api/v2/product_types/",
+            headers=headers,
+        )
+        return response.json()
+       
+
+async def get_product_type(id: int):
+     async with httpx.AsyncClient() as client:
+        response = await client.get(
+            f"{DEFECTDOJO_API_URL}/api/v2/product_types/{id}/",
+            headers=headers,
+        )
+        return response.json()
+
+async def delete_product_type(id: int):
+        async with httpx.AsyncClient() as client:
+            response = await client.delete(
+                f"{DEFECTDOJO_API_URL}/api/v2/product_types/{id}/",
+                headers=headers,
+            )
+            return response.json()
+
+async def update_product_type(id, data):
+    url = f"{DEFECTDOJO_API_URL}/api/v2/product_types/{id}/"
+
+    async with httpx.AsyncClient() as client:
+        response = await client.patch(
+            url,
+            headers=headers,
+            json=data
+        )
+        return response.json()
+
+
+async def full_update_product_type(id, data):
+    url = f"{DEFECTDOJO_API_URL}/api/v2/product_types/{id}/"
+
+    async with httpx.AsyncClient() as client:
+        response = await client.put(
+            url,
+            headers=headers,
+            json=data
+        )
+        return response.json()
