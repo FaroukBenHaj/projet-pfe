@@ -1,54 +1,22 @@
-from pydantic import BaseModel 
-from fastapi import APIRouter, Depends
-from defectdojo.client import *
-from typing import Optional
+from schemas.productType import ProductType as ProductTypeSchema
+from client import request
 
-router = APIRouter()
 
-class ProductType(BaseModel):
-    name: str
-    description: Optional[str]=""
-    critical_product: Optional[bool]=True
-    key_product: Optional[bool]=True
+#Product types CRUD :
+async def create_product_type(data: ProductTypeSchema):
+        return await request("POST", "product_types/", json=data.dict()) 
 
-@router.post("/product_types/")
-async def tool_create_product_type(request: ProductType):
-    response = await create_product_type(
-        name=request.name,
-        description=request.description,
-        critical_product=request.critical_product,
-        key_product=request.key_product
-    )
-    return response
+async def get_product_type_list():
+        return await request("GET", "product_types/") 
 
-@router.get("/product_types/")
-async def tool_list_product_type():
-    return await (get_product_type_list())
+async def get_product_type(id: int):
+        return await request("GET", f"product_types/{id}/") 
 
-@router.get("/product_types/{id}/")
-async def tool_get_product_type(id: int):
-    return await (get_product_type(id))
+async def delete_product_type(id: int):
+        return await request("DELETE", f"product_types/{id}/") 
 
-@router.delete("/product_types/{id}/")
-async def tool_delete_product_type(id: int):
-    return await (delete_product_type(id))
+async def update_product_type(id: int, data: ProductTypeSchema) -> dict :
+        return await request("PATCH", f"product_types/{id}/", json=data.model_dump(exclude_none=True)) 
 
-@router.patch("/product_types/{id}/")
-async def tool_update_product_type(id: int, request: ProductType):
-    data = {
-        "name": request.name,
-        "description": request.description,
-        "critical_product": request.critical_product,
-        "key_product": request.key_product
-    }
-    return await (update_product_type(id, data))
-
-@router.put("/product_types/{id}/")
-async def tool_put_product_type(id: int, request: ProductType):
-    data = {
-        "name": request.name,
-        "description": request.description,
-        "critical_product": request.critical_product,
-        "key_product": request.key_product
-    }
-    return await (full_update_product_type(id, data))
+async def full_update_product_type(id: int, data: ProductTypeSchema):
+        return await request("PUT", f"product_types/{id}/", json=data.model_dump(exclude_none=True)) 
