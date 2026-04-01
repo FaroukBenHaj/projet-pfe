@@ -1,5 +1,5 @@
 from typing import Any, Dict, Optional
-from defectdojo.client import get_client 
+from client.dojoClient import get_client 
 
 # --- Product Tool Definitions ---
 

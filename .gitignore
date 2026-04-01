@@ -9,3 +9,8 @@ venv
 .venv
 
 _pycache__
+.DS_Store
+*.egg-info/
+dist/
+build/
+services/=8.0.0
