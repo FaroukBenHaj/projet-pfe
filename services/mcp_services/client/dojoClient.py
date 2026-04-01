@@ -40,6 +40,17 @@ class DefectDojoClient:
             # Catch unexpected errors
             return {"error": f"An unexpected error occurred: {str(e)}"}
 
+ #product type endpoints
+    async def get_product_types(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Get all product types."""
+        return await self._request("GET", "/api/v2/product_types/", params=filters)
+
+ #products endpoints
+    async def get_products(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Get products with optional filters."""
+        return await self._request("GET", "/api/v2/products/", params=filters)
+
+
     # findings endpoints
     async def get_findings(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Get findings with optional filters."""
@@ -64,11 +75,7 @@ class DefectDojoClient:
         """Create a new finding."""
         return await self._request("POST", "/api/v2/findings/", json=data)
     
-    #products endpoints
-    async def get_products(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-        """Get products with optional filters."""
-        return await self._request("GET", "/api/v2/products/", params=filters)
-            
+   
     # engagements endpoints
     async def get_engagements(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Get engagements with optional filters."""
@@ -85,6 +92,8 @@ class DefectDojoClient:
     async def update_engagement(self, engagement_id: int, data: Dict[str, Any]) -> Dict[str, Any]:
         """Update an existing engagement."""
         return await self._request("PATCH", f"/api/v2/engagements/{engagement_id}/", json=data)
+
+
 
 # --- Client Factory ---
 
@@ -104,7 +113,7 @@ def get_client(validate_token=True, base_url=None, token=None) -> DefectDojoClie
     """
     # Use provided values or get from environment variables.
     # Ensure DEFECTDOJO_API_BASE and DEFECTDOJO_API_TOKEN are set in your environment.
-    actual_token = token if token is not None else os.environ.get(DEFECTDOJO_API_KEY)
+    actual_token = token if token is not None else os.environ.get("DEFECTDOJO_API_KEY")
     actual_base_url = base_url if base_url is not None else os.environ.get("DEFECTDOJO_API_URL")
 
     if not actual_base_url:
