@@ -3,3 +3,9 @@
 
 #files
 .env
+
+# Virtual environments
+venv
+.venv
+
+_pycache__
