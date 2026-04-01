@@ -33,7 +33,7 @@ async def list_products(name: Optional[str] = None, prod_type: Optional[int] = N
 
     return {"status": "success", "data": result}
 
-
+async def create_product(data: Dict[str, Any]) -> Dict[str, Any]:
 # --- Registration Function ---
 
 def register_tools(mcp):

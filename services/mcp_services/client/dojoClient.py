@@ -19,6 +19,7 @@ class DefectDojoClient:
         # Consider adding timeout configuration
         self.client = httpx.AsyncClient(headers=self.headers, timeout=30.0) 
 
+    ## requests 
     async def _request(self, method: str, endpoint: str, params: Optional[Dict[str, Any]] = None, json: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Helper method to make API requests."""
         url = f"{self.base_url}{endpoint}"
@@ -39,6 +40,7 @@ class DefectDojoClient:
             # Catch unexpected errors
             return {"error": f"An unexpected error occurred: {str(e)}"}
 
+    # findings endpoints
     async def get_findings(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Get findings with optional filters."""
         return await self._request("GET", "/api/v2/findings/", params=filters)
@@ -62,10 +64,12 @@ class DefectDojoClient:
         """Create a new finding."""
         return await self._request("POST", "/api/v2/findings/", json=data)
     
+    #products endpoints
     async def get_products(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Get products with optional filters."""
         return await self._request("GET", "/api/v2/products/", params=filters)
             
+    # engagements endpoints
     async def get_engagements(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Get engagements with optional filters."""
         return await self._request("GET", "/api/v2/engagements/", params=filters)
@@ -100,7 +104,7 @@ def get_client(validate_token=True, base_url=None, token=None) -> DefectDojoClie
     """
     # Use provided values or get from environment variables.
     # Ensure DEFECTDOJO_API_BASE and DEFECTDOJO_API_TOKEN are set in your environment.
-    actual_token = token if token is not None else os.environ.get("DEFECTDOJO_API_KEY")
+    actual_token = token if token is not None else os.environ.get(DEFECTDOJO_API_KEY)
     actual_base_url = base_url if base_url is not None else os.environ.get("DEFECTDOJO_API_URL")
 
     if not actual_base_url:
