@@ -8,7 +8,7 @@
 venv
 .venv
 
-_pycache__
+*/_pycache__
 .DS_Store
 *.egg-info/
 dist/
