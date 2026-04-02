@@ -1,6 +1,4 @@
 from typing import Any, Dict, List, Optional
-from  client.dojoClient  import get_client 
-
 # --- Finding Tool Definitions ---
 
 async def get_findings(product_name: Optional[str] = None, status: Optional[str] = None,
