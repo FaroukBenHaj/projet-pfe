@@ -1,7 +1,9 @@
 import httpx
 import os
 from typing import Any, Dict, Optional
-class ProductClient(BaseClient):
+from .defectDojo import DefectDojoClient
+
+class ProductClient(DefectDojoClient):
     #products endpoints
     async def get_products(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Get products with optional filters."""

@@ -1,8 +1,10 @@
 import httpx
 import os
 from typing import Any, Dict, Optional
+from .defectDojo import DefectDojoClient
+from .IEngagementsClient import IEngagementsClient
 
-class engagementsClient(BaseClient):
+class EngagementsClient(IEngagementsClient, DefectDojoClient):
     # engagements endpoints
     async def get_engagements(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Get engagements with optional filters."""

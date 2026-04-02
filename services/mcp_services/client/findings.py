@@ -1,8 +1,9 @@
 import httpx
 import os
 from typing import Any, Dict, Optional 
+from .defectDojo import DefectDojoClient
 
-class FindingsClient(BaseClient):
+class FindingsClient(DefectDojoClient):
     # findings endpoints
     async def get_findings(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Get findings with optional filters."""
