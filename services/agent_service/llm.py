@@ -1,9 +1,11 @@
 from langchain_ollama import ChatOllama
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 llm = ChatOllama(
-    model="qwen2.5:7b",
-    base_url="http://localhost:11434",  # default Ollama URL
-    temperature=0,  # 0 = more deterministic, better for agents
+    model=os.getenv("OLLAMA_MODEL", "qwen2.5:7b"),
+    base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
+    temperature=0,
 )
-response = llm.invoke("what do u know about the project I m working on right now ?")
-print(response.content)
