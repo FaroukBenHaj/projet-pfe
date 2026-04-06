@@ -1,48 +1,31 @@
-from langchain_core.messages import SystemMessage, HumanMessage, AIMessage, ToolMessage
+# agent/react_loop.py
+from langgraph.prebuilt import create_react_agent
+from langchain_ollama import ChatOllama
+from langchain_core.messages import HumanMessage, SystemMessage
+from config import settings
+from tools import tools
 from prompt import SYSTEM_PROMPT
-from llm import llm
-MAX_STEPS = 10
 
-def run_agent(user_input: str, tools: list):
-    # bind tools to the LLM
-    llm_with_tools = llm.bind_tools(tools)
-    
-    # initialize conversation history
-    messages = [
-        SystemMessage(content=SYSTEM_PROMPT),
-        HumanMessage(content=user_input),
-    ]
-    
-    for step in range(MAX_STEPS):
-        response = llm_with_tools.invoke(messages)
-        messages.append(response)
-        
-        # check if LLM wants to use a tool
-        if response.tool_calls:
-            for tool_call in response.tool_calls:
-                # 1. find the tool by name
-                tool_name = tool_call["name"]
-                tool_args = tool_call["args"]
-                tool_id   = tool_call["id"]
 
-                print(f"\n🔧 Agent wants to use: {tool_name}")
-                print(f"   with args: {tool_args}")
+def get_agent():
+    llm = ChatOllama(
+        model=settings.ollama_model,
+        base_url=settings.ollama_base_url,
+        temperature=0,
+    )
+    return create_react_agent(
+        model=llm,
+        tools=tools,
+        prompt=SYSTEM_PROMPT,
+    )
 
-                # 2. find and run the matching tool
-                matching_tool = next((t for t in tools if t.name == tool_name), None)
 
-                if matching_tool is None:
-                    result = f"Error: tool '{tool_name}' not found."
-                else:
-                    result = matching_tool.invoke(tool_args)
+def run(user_message: str, history: list = []) -> str:
+    agent = get_agent()
 
-                # 3. add tool result to history
-                messages.append(ToolMessage(
-                    content=str(result),
-                    tool_call_id=tool_id,
-                ))
-        else:
-            # LLM is done, return final answer
-            return response.content
-    
-    return "Max steps reached. Task incomplete."
+    messages = history + [HumanMessage(content=user_message)]
+
+    result = agent.invoke({"messages": messages})
+
+    # Last message in the result is the final answer
+    return result["messages"][-1].content

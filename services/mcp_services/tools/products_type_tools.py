@@ -24,7 +24,6 @@ async def list_product_types(limit: int = 50, offset: int = 0) -> Dict[str, Any]
 
     return {"status": "success", "data": result}
 
-    # --- Registration Function ---
 
 async def create_product_type(name: str, description: Optional[str] = None, critical_product: Optional[bool] = False, key_product: Optional[bool] = False) -> Dict[str, Any]:
     """Create a new product type."""
