@@ -19,6 +19,7 @@ def get_agent():
         model=llm,
         tools=tools,
         prompt=SYSTEM_PROMPT,
+        checkpointer=saver,
     )
 
 
@@ -27,7 +28,10 @@ def run(user_message: str, history: list = []) -> str:
 
     messages = history + [HumanMessage(content=user_message)]
 
-    result = agent.invoke({"messages": messages})
+    result = agent.invoke(
+        {"messages": messages},
+        {"configurable": {"thread_id": "default"}}
+        )
 
     # Last message in the result is the final answer
     return result["messages"][-1].content
