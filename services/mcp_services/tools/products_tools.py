@@ -1,5 +1,4 @@
 from typing import Any, Dict, Optional
-from client.dojoClient import get_client 
 
 # --- Product Tool Definitions ---
 

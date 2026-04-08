@@ -1,6 +1,5 @@
 from typing import Any, Dict, Optional, List
-from  client.dojoClient  import get_client
-
+from core.dependencies import get_client
 # --- Engagement Tool Definitions ---
 
 async def list_engagements(product_id: Optional[int] = None,

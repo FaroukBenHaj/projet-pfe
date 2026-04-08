@@ -1,6 +1,4 @@
 from typing import Any, Dict, Optional
-from client.dojoClient import get_client 
-
 # --- Product type Tool Definitions ---
 async def list_product_types(limit: int = 50, offset: int = 0) -> Dict[str, Any]:
     """List all product types with pagination.

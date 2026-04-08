@@ -2,6 +2,7 @@
 from mcp.server.fastmcp import FastMCP
 from dotenv import load_dotenv
 from tools import (findings_tools, products_tools, engagements_tools , products_type_tools)
+
 load_dotenv()
 
 a = FastMCP("defectdojo", stateless_http=True, port=8081)
