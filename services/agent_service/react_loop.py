@@ -5,7 +5,9 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from config import settings
 from tools import tools
 from prompt import SYSTEM_PROMPT
+from langgraph.checkpoint.memory import InMemorySaver
 
+saver = InMemorySaver()
 
 def get_agent():
     llm = ChatOllama(
