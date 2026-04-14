@@ -1,0 +1,24 @@
+{
+  "scenario_id": "scenario_03",
+  "scenario_name": "Memory Test Across Turns",
+  "model": "qwen2.5:7b",
+  "timestamp": "2026-04-14T14:43:40.784035",
+  "turns": [
+    {
+      "turn": 1,
+      "user": "Product type is Web Application, product is FinanceHub.",
+      "agent": "\u274c Failed at Test Type: Test type 'PenTest' not found. Please provide a valid test type name or check if the test type exists in DefectDojo.\n\nLet's try again with a different test type. Could you please specify an existing test type? If unsure, I can list all available test types for you."
+    },
+    {
+      "turn": 2,
+      "user": "I found an XSS vulnerability, Medium severity.",
+      "agent": "Great! Let's proceed with the details:\n\nRequired fields:\n- `product_type_name`: Web Application\n- `product_name`: FinanceHub\n- `finding_title`: XSS Vulnerability\n- `finding_description`: Potential Cross-Site Scripting (XSS) vulnerability found in user input handling.\n- `finding_severity`: Medium\n\nOptional fields:\n- `test_type_name`: Choose an existing test type name, or I can list all available test types for you.\n\nDo you want to continue with these details? If so, please confirm the `test_type_name`. If not, provide any missing information."
+    },
+    {
+      "turn": 3,
+      "user": "It was found by Bob, in the search bar.",
+      "agent": "Great! Let's include that information. Here are the fields we have so far:\n\n- `product_type_name`: Web Application\n- `product_name`: FinanceHub\n- `finding_title`: XSS Vulnerability\n- `finding_description`: Potential Cross-Site Scripting (XSS) vulnerability found in user input handling.\n- `finding_severity`: Medium\n- `finding_found_by`: [\"Bob\"]\n\nWe still need to specify the `test_type_name`. If you're unsure, I can list all available test types for you.\n\nDo you want to continue with these details? If so, please confirm the `test_type_name`. If not, provide any missing information."
+    }
+  ]
+}
+

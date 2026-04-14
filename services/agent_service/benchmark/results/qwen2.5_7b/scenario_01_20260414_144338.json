@@ -1,0 +1,13 @@
+{
+  "scenario_id": "scenario_01",
+  "scenario_name": "Full Info Given At Once",
+  "model": "qwen2.5:7b",
+  "timestamp": "2026-04-14T14:43:24.120998",
+  "turns": [
+    {
+      "turn": 1,
+      "user": "I found a SQL Injection on FinanceHub, High severity, in the login page, product type is Web Application, found by Alice, engagement starts today and ends in 10 days.",
+      "agent": "Product: FinanceHub - **reused** \u2014 ID: 20\n\nNow, let's proceed to create or reuse the Engagement. The engagement name will be auto-generated as \"FinanceHub - Web Application - 2026-04-13\". Let's check if this engagement already exists.\n"
+    }
+  ]
+}
