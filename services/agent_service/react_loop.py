@@ -23,10 +23,10 @@ def get_agent():
     )
 
 
-def run(user_message: str, history: list = []) -> str:
+def run(user_message: str) -> str:
     agent = get_agent()
 
-    messages = history + [HumanMessage(content=user_message)]
+    messages = [HumanMessage(content=user_message)]
 
     result = agent.invoke(
         {"messages": messages},

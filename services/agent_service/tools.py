@@ -631,4 +631,4 @@ def run_pipeline(
     }
 
 # ✅ list_product_types is now included
-tools = [list_product_types, run_pipeline , create_product_type, get_product_type, update_product_type, delete_product_type , get_product, create_product, get_engagements, create_engagement, get_tests, create_test, get_findings, create_finding , list_test_types]
+tools = [run_pipeline , get_findings]

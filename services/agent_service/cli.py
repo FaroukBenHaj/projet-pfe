@@ -5,8 +5,6 @@ def main():
     print("DefectDojo Tester Agent")
     print("Type 'exit' to quit\n")
 
-    history = []
-
     while True:
         try:
             user_input = input("You: ").strip()
@@ -18,7 +16,7 @@ def main():
                 print("Goodbye!")
                 break
 
-            response = run(user_input, history)
+            response = run(user_input)
             print(f"\nAgent: {response}\n")
 
         except KeyboardInterrupt:

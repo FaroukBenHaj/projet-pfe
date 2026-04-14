@@ -25,7 +25,6 @@ Rules per level:
 
 Required:
   product_type_name     → string
-  prod_type             -> int 
   product_name          → string  
   product_description   → string
   engagement_target_start → YYYY-MM-DD
@@ -37,9 +36,9 @@ Required:
   finding_description   → string
   finding_severity      → one of: Info | Low | Medium | High | Critical
   finding_date          → YYYY-MM-DD
-  finding_found_by             → List of strings (e.g. ["Alice", "Bob"])
-  finding_active     → boolean (default: true)
-  finding_verified → boolean (default: false)
+  finding_found_by      → List of strings (e.g. ["Alice", "Bob"])
+  finding_active        → boolean (default: true)
+  finding_verified      → boolean (default: false)
   finding_numeric_severity → string (S0, S1, S2, S3, S4)
 
 Optional (skip if not provided):
