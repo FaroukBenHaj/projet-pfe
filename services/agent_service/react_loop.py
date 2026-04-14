@@ -6,6 +6,7 @@ from config import settings
 from tools import tools
 from prompt import SYSTEM_PROMPT
 from langgraph.checkpoint.memory import InMemorySaver
+from deepeval.integrations.langchain import CallbackHandler
 
 saver = InMemorySaver()
 
@@ -20,6 +21,7 @@ def get_agent():
         tools=tools,
         prompt=SYSTEM_PROMPT,
         checkpointer=saver,
+        
     )
 
 
@@ -30,7 +32,7 @@ def run(user_message: str, history: list = []) -> str:
 
     result = agent.invoke(
         {"messages": messages},
-        {"configurable": {"thread_id": "default"}}
+        {"configurable": {"thread_id": "default"},"callbacks": [CallbackHandler()] }
         )
 
     # Last message in the result is the final answer
