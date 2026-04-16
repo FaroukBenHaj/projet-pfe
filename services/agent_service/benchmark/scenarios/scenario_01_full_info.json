@@ -1,0 +1,18 @@
+{
+  "id": "scenario_01",
+  "name": "Full Info Given At Once",
+  "description": "User provides all key info in one message. Agent should extract and ask only for what's missing.",
+  "turns": [
+    {
+      "turn": 1,
+      "user": "I found a SQL Injection on FinanceHub, High severity, in the login page, product type is Web Application, found by Alice, engagement starts today and ends in 10 days."
+    }
+  ],
+  "expected_behavior": {
+    "extracts_fields": ["product_type_name", "product_name","product_description" ,"finding_title", "finding_severity", "finding_found_by", "engagement_target_start", "engagement_target_end" , "product_description", "test_type_name", "finding_description"],
+    "should_ask_for": [" any missing required fields "],
+    "should_NOT_ask_for": ["finding_active", "finding_verified", "finding_numeric_severity"],
+    "should_use_tool": "run_pipeline",
+    "should_NOT_use_tools": ["create_product", "create_engagement", "create_test", "create_finding"]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "scenario_04",
+  "name": "Edge Cases",
+  "description": "Tests boundary behaviors: out-of-scope requests, wrong severity, missing test type.",
+  "turns": [
+    {
+      "id": "04a",
+      "name": "Out of scope request",
+      "user": "Can you help me write a Python script?",
+      "expected": "Politely decline and stay in scope"
+    },
+    {
+      "id": "04b",
+      "name": "Wrong severity value",
+      "user": "I found a bug, severity is Extreme.",
+      "expected": "Ask user to pick from: Info | Low | Medium | High | Critical"
+    },
+    {
+      "id": "04c",
+      "name": "Unknown test type",
+      "user": "Test type is CustomScan",
+      "expected": "Offer to list available test types via list_test_types"
+    },
+    {
+      "id": "04d",
+      "name": "User says stop",
+      "user": "Actually cancel everything.",
+      "expected": "Stop immediately, do not proceed"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "id": "scenario_03",
+  "name": "Memory Test Across Turns",
+  "description": "Info is spread across multiple messages. Agent must retain context and never re-ask what was already given.",
+  "turns": [
+    {
+      "turn": 1,
+      "user": "Product type is Web Application, product is FinanceHub."
+    },
+    {
+      "turn": 2,
+      "user": "I found an XSS vulnerability, Medium severity."
+    },
+    {
+      "turn": 3,
+      "user": "It was found by Bob, in the search bar."
+    }
+  ],
+  "expected_behavior": {
+    "after_turn_1": {
+      "remembers": ["product_type_name", "product_name"],
+      "should_NOT_re_ask": ["product_type_name", "product_name"]
+    },
+    "after_turn_2": {
+      "remembers": ["finding_title", "finding_severity"],
+      "should_ask_for": ["finding_description", "test_type_name", "finding_found_by"],
+      "should_NOT_re_ask": ["product_type_name", "product_name", "finding_title"]
+    },
+    "after_turn_3": {
+      "should_use_tool": "run_pipeline",
+      "should_NOT_re_ask": "anything already provided"
+    }
+  }
+}

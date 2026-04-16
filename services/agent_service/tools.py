@@ -253,6 +253,9 @@ def get_client() -> DefectDojoClient:
 
 
 # ✅ All tools are now sync (no async def)
+
+
+
 @tool
 def list_product_types(limit: int = 50, offset: int = 0) -> dict:
     """List all product types with pagination."""
@@ -345,7 +348,7 @@ def get_product(product_name: str) -> dict:
 def create_product(
     name: str,
     description: Optional[str] = None,
-    prod_type: Optional[int] = None,
+    prod_type: int = None,
 ) -> dict:
     """Create a new product."""
     client = get_client()
@@ -479,13 +482,14 @@ def create_finding(
         return {"status": "error", "error": result["error"], "details": result.get("details", "")}
     return {"status": "success", "data": result}
 
+
+
 @tool
 def run_pipeline(
     product_type_name: str,
 
     product_name: str,
     product_description: str ,
-    prod_type: int ,
     engagement_target_start: str = None,  
     engagement_target_end: str = None,   
 
@@ -631,4 +635,4 @@ def run_pipeline(
     }
 
 # ✅ list_product_types is now included
-tools = [run_pipeline , get_findings]
+tools = [run_pipeline ,list_test_types, get_findings , list_product_types, create_finding, get_tests, create_test, get_engagements, create_engagement, get_product, create_product, get_product_type, create_product_type, update_product_type, delete_product_type]
