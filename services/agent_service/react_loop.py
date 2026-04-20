@@ -23,14 +23,14 @@ def get_agent():
     )
 
 
-def run(user_message: str, history: list = []) -> str:
+def run(user_message: str , thread_id:str = "default") -> str:
     agent = get_agent()
 
-    messages = history + [HumanMessage(content=user_message)]
+    messages = [HumanMessage(content=user_message)]
 
     result = agent.invoke(
         {"messages": messages},
-        {"configurable": {"thread_id": "default"}}
+        {"configurable": {"thread_id": thread_id}}
         )
 
     # Last message in the result is the final answer
