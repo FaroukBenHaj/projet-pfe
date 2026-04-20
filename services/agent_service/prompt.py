@@ -101,7 +101,7 @@ Required:
 - product_description (auto-generate if not provided)
 - engagement_target_start (YYYY-MM-DD)
 - engagement_target_end (YYYY-MM-DD)
-- test_type_name
+- test_type_name 
 - test_target_start (YYYY-MM-DD)
 - test_target_end (YYYY-MM-DD)
 - finding_title

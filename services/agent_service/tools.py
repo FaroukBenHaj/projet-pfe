@@ -461,7 +461,7 @@ def create_finding(
     verified: bool = False,
     duplicate: bool = False,
     numeric_severity: str = "S0",
-    found_by: Optional[List[str]] = None,
+    found_by: List[int] = None,
 ) -> dict:
     """Create a new finding."""
     client = get_client()
@@ -489,7 +489,7 @@ def run_pipeline(
     product_type_name: str,
 
     product_name: str,
-    product_description: str ,
+    product_description:str = None ,
     engagement_target_start: str = None,  
     engagement_target_end: str = None,   
 
@@ -501,10 +501,10 @@ def run_pipeline(
     finding_description: str = "",
     finding_severity: str = "Medium",     # Info / Low / Medium / High / Critical
     finding_date: str = None,             # "YYYY-MM-DD"
-    finding_found_by: List[str] =[],        # to verify
+    finding_found_by: List[int] = [1] ,        # to verify
     finding_active: bool = True,
     finding_verified: bool = False,
-    finding_numeric_severity: str = "",  # 0-10 scale, overrides severity if provided
+    finding_numeric_severity: str = None,  # 0-10 scale, overrides severity if provided
     
     # endpoint_host: Optional[str] = None,
     # endpoint_path: Optional[str] = None,
@@ -618,8 +618,8 @@ def run_pipeline(
         numeric_severity=finding_numeric_severity,
         test=test_id,
         date=finding_date or date.today().isoformat(),
-        active=finding_active,
-        verified=finding_verified,
+        active=True,
+        verified=False,
         found_by=finding_found_by ,
 
     )

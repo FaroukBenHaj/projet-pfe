@@ -5,7 +5,7 @@
   "turns": [
     {
       "turn": 1,
-      "user": "I found a SQL Injection on FinanceHub, High severity, in the login page, product type is Web Application, found by Alice, engagement starts today and ends in 10 days."
+      "user": "Hey Ahmed here — identified a Critical issue in PayFlow (Finance web app, Q1 Security Audit Feb 1–28, 2025, DAST Feb 10–25) SQL Injection vulnerability in the login endpoint allows attackers to bypass authentication and access sensitive financial data. Please log it for Feb 15th."
     }
   ],
   "expected_behavior": {
