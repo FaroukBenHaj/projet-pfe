@@ -1,6 +1,8 @@
 import httpx
 import os
 from typing import Any, Dict, Optional
+from schemas.productType import ProductType , ProductTypeUpdate
+from schemas.product import Product , ProductUpdate
 
 class DefectDojoClient:
     """Client for interacting with the DefectDojo API."""
@@ -40,51 +42,53 @@ class DefectDojoClient:
             # Catch unexpected errors
             return {"error": f"An unexpected error occurred: {str(e)}"}
 
- #product type endpoints
+#product type endpoints
     async def get_product_types(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Get all product types."""
         return await self._request("GET", "/api/v2/product_types/", params=filters)
-
-    async def create_product_type(self , name: str, description: Optional[str] = None, critical_product: Optional[bool] = False, key_product: Optional[bool] = False) -> Dict[str, Any]:
-        """Create a new product type """
-        data = {
-            "name": name,
-            "description": description,
-            "critical_product": critical_product,
-            "key_product": key_product
-        }
-        return await self._request("POST", "/api/v2/product_types/", json=data)
     
     async def get_product_type(self, product_type_id: int) -> Dict[str, Any]:
         """Get a specific product type by ID."""
         return await self._request("GET", f"/api/v2/product_types/{product_type_id}/")
     
-    async def update_product_type(self, product_type_id: int, name: Optional[str] = None, description: Optional[str] = None, critical_product: Optional[bool] = None, key_product: Optional[bool] = None) -> Dict[str, Any]:
-        """Update an existing product type."""
-        data = {}
-        if name is not None:
-            data["name"] = name
-        if description is not None:
-            data["description"] = description
-        if critical_product is not None:
-            data["critical_product"] = critical_product
-        if key_product is not None:
-            data["key_product"] = key_product
-        
-        return await self._request("PATCH", f"/api/v2/product_types/{product_type_id}/", json=data)
+    async def create_product_type(self , data: ProductType) -> Dict[str, Any]:
+        """Create a new product type """
+        return await self._request("POST", "/api/v2/product_types/", json=data.model_dump())
+    
+    async def update_product_type(self, product_type_id: int , data: ProductTypeUpdate ) -> Dict[str, Any]:
+        """Update an existing product type."""        
+        return await self._request("PATCH", f"/api/v2/product_types/{product_type_id}/", json=data.model_dump(exclude_none=True))
 
     async def delete_product_type(self, product_type_id: int) -> Dict[str, Any]:
         """Delete a product type by ID."""
         return await self._request("DELETE", f"/api/v2/product_types/{product_type_id}/")
 
 
- #products endpoints
+#products endpoints
     async def get_products(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Get products with optional filters."""
         return await self._request("GET", "/api/v2/products/", params=filters)
 
+    async def get_product(self, product_id: int) -> Dict[str, Any]:
+        """Get a specific product by ID."""
+        return await self._request("GET", f"/api/v2/products/{product_id}/")
+    
+    async def create_product(self, data: Product) -> Dict[str, Any]:
+        """Create a new product."""
+        return await self._request("POST", "/api/v2/products/", json=data.model_dump())
 
-    # findings endpoints
+    async def update_product(self, product_id: int, data: ProductUpdate) -> Dict[str, Any]:
+        """Update an existing product."""
+        return await self._request("PATCH", f"/api/v2/products/{product_id}/", json=data.model_dump(exclude_none=True))
+
+    async def delete_product(self, product_id: int) -> Dict[str, Any]:
+        """Delete a product by ID."""
+        return await self._request("DELETE", f"/api/v2/products/{product_id}/")
+    
+    async def get_product_by_name_and_type(self, name: str, product_type_id: int) -> Dict[str, Any]:
+     filters = {"name": name, "prod_type": product_type_id}
+     return await self.get_products(filters=filters)
+# findings endpoints
     async def get_findings(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Get findings with optional filters."""
         return await self._request("GET", "/api/v2/findings/", params=filters)
@@ -109,7 +113,7 @@ class DefectDojoClient:
         return await self._request("POST", "/api/v2/findings/", json=data)
     
    
-    # engagements endpoints
+# engagements endpoints
     async def get_engagements(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Get engagements with optional filters."""
         return await self._request("GET", "/api/v2/engagements/", params=filters)
