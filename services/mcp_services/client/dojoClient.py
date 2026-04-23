@@ -3,7 +3,7 @@ import os
 from typing import Any, Dict, Optional
 from schemas.productType import ProductType , ProductTypeUpdate
 from schemas.product import Product , ProductUpdate
-
+from schemas.engagements import Engagement, EngagementUpdate
 class DefectDojoClient:
     """Client for interacting with the DefectDojo API."""
     def __init__(self, base_url: str, api_token: str):
@@ -63,7 +63,6 @@ class DefectDojoClient:
         """Delete a product type by ID."""
         return await self._request("DELETE", f"/api/v2/product_types/{product_type_id}/")
 
-
 #products endpoints
     async def get_products(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Get products with optional filters."""
@@ -88,6 +87,7 @@ class DefectDojoClient:
     async def get_product_by_name_and_type(self, name: str, product_type_id: int) -> Dict[str, Any]:
      filters = {"name": name, "prod_type": product_type_id}
      return await self.get_products(filters=filters)
+
 # findings endpoints
     async def get_findings(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Get findings with optional filters."""
@@ -111,8 +111,7 @@ class DefectDojoClient:
     async def create_finding(self, data: Dict[str, Any]) -> Dict[str, Any]:
         """Create a new finding."""
         return await self._request("POST", "/api/v2/findings/", json=data)
-    
-   
+     
 # engagements endpoints
     async def get_engagements(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Get engagements with optional filters."""
@@ -122,15 +121,47 @@ class DefectDojoClient:
         """Get a specific engagement by ID."""
         return await self._request("GET", f"/api/v2/engagements/{engagement_id}/")
     
-    async def create_engagement(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    async def create_engagement(self, data: Engagement) -> Dict[str, Any]:
         """Create a new engagement."""
         return await self._request("POST", "/api/v2/engagements/", json=data)
     
-    async def update_engagement(self, engagement_id: int, data: Dict[str, Any]) -> Dict[str, Any]:
+    async def update_engagement(self, engagement_id: int, data: EngagementUpdate) -> Dict[str, Any]:
         """Update an existing engagement."""
-        return await self._request("PATCH", f"/api/v2/engagements/{engagement_id}/", json=data)
+        return await self._request("PATCH", f"/api/v2/engagements/{engagement_id}/", json=data.model_dump(exclude_none=True))
 
+    async def delete_engagement(self, engagement_id: int) -> Dict[str, Any]:
+        """Delete an engagement by ID."""
+        return await self._request("DELETE", f"/api/v2/engagements/{engagement_id}/")
 
+    async def get_engagement_by_name_and_product(self, name: str, product_id: int) -> Dict[str, Any]:
+        filters = {"name": name, "product": product_id}
+        return await self.get_engagements(filters=filters)
+
+   
+# test endpoints
+    async def get_tests(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Get tests with optional filters."""
+        return await self._request("GET", "/api/v2/tests/", params=filters)
+    
+    async def get_test(self, test_id: int) -> Dict[str, Any]:
+        """Get a specific test by ID."""
+        return await self._request("GET", f"/api/v2/tests/{test_id}/")
+    
+    async def create_test(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Create a new test."""
+        return await self._request("POST", "/api/v2/tests/", json=data)
+
+    async def update_test(self, test_id: int, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Update an existing test."""
+        return await self._request("PATCH", f"/api/v2/tests/{test_id}/", json=data)
+
+    async def delete_test(self, test_id: int) -> Dict[str, Any]:
+        """Delete a test by ID."""
+        return await self._request("DELETE", f"/api/v2/tests/{test_id}/")
+
+    async def get_test_by_name_and_engagement(self, name: str, engagement_id: int) -> Dict[str, Any]:
+        filters = {"name": name, "engagement": engagement_id}
+        return await self.get_tests(filters=filters)
 
 # --- Client Factory ---
 

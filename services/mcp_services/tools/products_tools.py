@@ -4,17 +4,6 @@ from schemas.product import Product, ProductUpdate
 # --- Product Tool Definitions ---
 
 async def list_products(limit: int = 50, offset: int = 0) -> Dict[str, Any]:
-    """List all products with optional filtering and pagination.
-
-    Args:
-        name: Optional name filter (partial match)
-        prod_type: Optional product type ID filter
-        limit: Maximum number of products to return per page (default: 50)
-        offset: Number of records to skip (default: 0)
-
-    Returns:
-        Dictionary with status, data/error, and pagination metadata
-    """
     filters = {"limit": limit}
     # Use __icontains for case-insensitive partial match if API supports it
     if offset:
