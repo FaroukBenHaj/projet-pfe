@@ -35,7 +35,7 @@ async def get_engagement(engagement_id: int) -> Dict[str, Any]:
 
 async def update_engagement(engagement_id: int, data: EngagementUpdate) -> Dict[str, Any]:
     client = get_client()
-    result = await client.update_engagement(product_id, data)
+    result = await client.update_engagement(engagement_id, data)
     if "error" in result:
         return {"status": "error", "error": result["error"], "details": result.get("details", "")}
     return {"status": "success", "data": result}
@@ -48,7 +48,6 @@ async def delete_engagement(engagement_id: int) -> Dict[str, Any]:
     return {"status": "success", "data": result}
 
 async def run_engagement_pipeline(product_id: int, engagement_data: Engagement) -> Dict[str, Any]:
-    print(f"Type of engagement_data: {type(engagement_data)}") # Add this line
     client = get_client()
     summary ={}
     eng_result = await client.get_engagements({"product": product_id})

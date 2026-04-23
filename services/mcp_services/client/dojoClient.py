@@ -153,14 +153,14 @@ class DefectDojoClient:
 
     async def update_test(self, test_id: int, data: Dict[str, Any]) -> Dict[str, Any]:
         """Update an existing test."""
-        return await self._request("PATCH", f"/api/v2/tests/{test_id}/", json=data)
+        return await self._request("PATCH", f"/api/v2/tests/{test_id}/", json=data.model_dump(exclude_none=True))
 
     async def delete_test(self, test_id: int) -> Dict[str, Any]:
         """Delete a test by ID."""
         return await self._request("DELETE", f"/api/v2/tests/{test_id}/")
 
-    async def get_test_by_name_and_engagement(self, name: str, engagement_id: int) -> Dict[str, Any]:
-        filters = {"name": name, "engagement": engagement_id}
+    async def get_test_by_title_and_engagement(self, title: str, engagement_id: int) -> Dict[str, Any]:
+        filters = {"title": title, "engagement": engagement_id}
         return await self.get_tests(filters=filters)
 
 # --- Client Factory ---

@@ -16,15 +16,6 @@ async def list_products(limit: int = 50, offset: int = 0) -> Dict[str, Any]:
 
     return {"status": "success", "data": result}
 
-async def create_product(data: Product) -> Dict[str, Any]:
-    """Create a new product."""
-    client = get_client()
-    result = await client.create_product(data)
-
-    if "error" in result:
-        return {"status": "error", "error": result["error"], "details": result.get("details", "")}
-    return {"status": "success", "data": result}
-
 async def get_product(product_id: int) -> Dict[str, Any]:
     """Get a specific product by ID."""
     client = get_client()
@@ -63,7 +54,7 @@ async def run_product_pipeline(product_type_id: int, product_data: Product) -> d
     else:
         create_payload = product_data.model_dump(exclude_none=True)
         create_payload["prod_type"] = product_type_id
-        created = await client.create_product(product_data)
+        created = await client.create_product(create_payload)
        
         if "error" in created:
             return {"status": "error", "step": "create_product", "error": created["error"]}
