@@ -4,6 +4,8 @@ from typing import Any, Dict, Optional
 from schemas.productType import ProductType , ProductTypeUpdate
 from schemas.product import Product , ProductUpdate
 from schemas.engagements import Engagement, EngagementUpdate
+from schemas.test import Test, TestUpdate
+from schemas.test_type import TestType, TestTypeUpdate
 class DefectDojoClient:
     """Client for interacting with the DefectDojo API."""
     def __init__(self, base_url: str, api_token: str):
@@ -163,6 +165,18 @@ class DefectDojoClient:
         filters = {"title": title, "engagement": engagement_id}
         return await self.get_tests(filters=filters)
 
+#Test Type endpoints
+    async def get_test_types(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        return await self._request("GET", "/api/v2/test_types/", params=filters)
+    
+    async def get_test_type(self, test_type_id: int) -> Dict[str, Any]:
+        return await self._request("GET", f"/api/v2/test_types/{test_type_id}/")
+    
+    async def create_test_type(self, data: TestType) -> Dict[str, Any]:
+        return await self._request("POST", "/api/v2/test_types/", json=data.model_dump())
+
+    async def update_test_type(self, test_type_id: int, data: TestTypeUpdate) -> Dict[str, Any]:
+        return await self._request("PATCH", f"/api/v2/test_types/{test_type_id}/", json=data.model_dump(exclude_none=True))
 # --- Client Factory ---
 
 def get_client(validate_token=True, base_url=None, token=None) -> DefectDojoClient:

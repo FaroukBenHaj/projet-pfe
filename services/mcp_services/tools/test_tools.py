@@ -63,7 +63,6 @@ async def run_test_pipeline(engagement_id: int, test_data: Test) -> dict[str, An
         summary["test"] = {"action": "created", "id": test_id}
     return {"status": "success", "data": summary , "Test_id": test_id}
 
-# --- Registration Function ---
 
 def register_tools(mcp):
     """Register Test-related tools with the MCP server instance."""
