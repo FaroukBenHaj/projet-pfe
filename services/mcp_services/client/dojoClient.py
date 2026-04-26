@@ -6,6 +6,7 @@ from schemas.product import Product , ProductUpdate
 from schemas.engagements import Engagement, EngagementUpdate
 from schemas.test import Test, TestUpdate
 from schemas.test_type import TestType, TestTypeUpdate
+from schemas.findings import Finding, FindingUpdate
 class DefectDojoClient:
     """Client for interacting with the DefectDojo API."""
     def __init__(self, base_url: str, api_token: str):
@@ -94,26 +95,28 @@ class DefectDojoClient:
     async def get_findings(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Get findings with optional filters."""
         return await self._request("GET", "/api/v2/findings/", params=filters)
+
+    async def get_finding(self, finding_id: int) -> Dict[str, Any]:
+        """Get a specific finding by ID."""
+        return await self._request("GET", f"/api/v2/findings/{finding_id}/")
     
-    async def search_findings(self, query: str, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-        """Search for findings using a text query."""
-        params = filters or {}
-        params["search"] = query
-        return await self._request("GET", "/api/v2/findings/", params=params)
-    
-    async def update_finding(self, finding_id: int, data: Dict[str, Any]) -> Dict[str, Any]:
+    async def update_finding(self, finding_id: int, data: FindingUpdate) -> Dict[str, Any]:
         """Update a finding by ID."""
-        return await self._request("PATCH", f"/api/v2/findings/{finding_id}/", json=data)
+        return await self._request("PATCH", f"/api/v2/findings/{finding_id}/", json=data.model_dump(exclude_none=True))
     
-    async def add_note_to_finding(self, finding_id: int, note: str) -> Dict[str, Any]:
-        """Add a note to a finding."""
-        data = {"entry": note, "finding": finding_id}
-        return await self._request("POST", "/api/v2/notes/", json=data)
-    
-    async def create_finding(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    async def delete_finding(self, finding_id: int) -> Dict[str, Any]:
+        """Delete a finding by ID."""
+        return await self._request("DELETE", f"/api/v2/findings/{finding_id}/")
+
+    async def create_finding(self, data: Finding) -> Dict[str, Any]:
         """Create a new finding."""
         return await self._request("POST", "/api/v2/findings/", json=data)
-     
+    
+    async def get_finding_by_title_and_test(self, title: str, test_id: int) -> Dict[str, Any]:
+        filters = {"title": title, "test": test_id}
+        return await self.get_findings(filters=filters)
+
+
 # engagements endpoints
     async def get_engagements(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Get engagements with optional filters."""
@@ -139,7 +142,6 @@ class DefectDojoClient:
         filters = {"name": name, "product": product_id}
         return await self.get_engagements(filters=filters)
 
-   
 # test endpoints
     async def get_tests(self, filters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Get tests with optional filters."""
