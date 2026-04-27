@@ -1,0 +1,18 @@
+{
+  "id": "scenario_02",
+  "name": "Minimal Info",
+  "description": "User gives almost nothing. Agent should ask ONE field at a time, not dump all questions.",
+  "turns": [
+    {
+      "turn": 1,
+      "user": "I found a vulnerability."
+    }
+  ],
+  "expected_behavior": {
+    "extracts_fields": [],
+    "should_ask_for": ["ONE field only — e.g. product_name or finding_title, not multiple fields at once"],
+    "should_NOT_ask_for": ["multiple fields at once", "finding_active", "finding_verified", "finding_numeric_severity"],
+    "should_use_tool": null,
+    "should_NOT_use_tools": ["run_pipeline"]
+  }
+}

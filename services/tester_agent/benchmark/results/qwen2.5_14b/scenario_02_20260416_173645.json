@@ -1,0 +1,13 @@
+{
+  "scenario_id": "scenario_02",
+  "scenario_name": "Minimal Info",
+  "model": "qwen2.5:14b",
+  "timestamp": "2026-04-16T17:36:44.394618",
+  "turns": [
+    {
+      "turn": 1,
+      "user": "I found a vulnerability.",
+      "agent": "To proceed with adding the vulnerability to DefectDojo, I need more details such as the product type, product name, engagement information, test type, and specific finding details like title, severity, and date.\n\nPlease provide the necessary information or confirm if you want me to auto-generate some defaults."
+    }
+  ]
+}

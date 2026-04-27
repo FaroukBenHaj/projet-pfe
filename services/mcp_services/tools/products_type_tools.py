@@ -1,7 +1,7 @@
 from typing import Any, Dict, Optional
 from client.dojoClient import get_client 
+from schemas.productType import ProductType, ProductTypeUpdate, ProductTypeResponse
 
-# --- Product type Tool Definitions ---
 async def list_product_types(limit: int = 50, offset: int = 0) -> Dict[str, Any]:
     """List all product types with pagination.
 
@@ -23,23 +23,6 @@ async def list_product_types(limit: int = 50, offset: int = 0) -> Dict[str, Any]
         return {"status": "error", "error": result["error"], "details": result.get("details", "")}
 
     return {"status": "success", "data": result}
-
-
-async def create_product_type(name: str, description: Optional[str] = None, critical_product: Optional[bool] = False, key_product: Optional[bool] = False) -> Dict[str, Any]:
-    """Create a new product type."""
-    client = get_client()
-    data = {
-        "name": name,
-        "description": description,
-        "critical_product": critical_product,
-        "key_product": key_product
-    }
-    result = await client.create_product_type(**data)
-
-    if "error" in result:
-        return {"status": "error", "error": result["error"], "details": result.get("details", "")}
-
-    return {"status": "success", "data": result}
     
 async def get_product_type(product_type_id: int) -> Dict[str, Any]:
     """Get a specific product type by ID."""
@@ -51,25 +34,10 @@ async def get_product_type(product_type_id: int) -> Dict[str, Any]:
 
     return {"status": "success", "data": result}
 
-async def update_product_type(product_type_id: int, name: Optional[str] = None, description: Optional[str] = None, critical_product: Optional[bool] = None, key_product: Optional[bool] = None) -> Dict[str, Any]:
+async def update_product_type(product_type_id: int, data: ProductTypeUpdate) -> Dict[str, Any]:
     """Update an existing product type."""
     client = get_client()
-    data = {}
-    if name is not None:
-        data["name"] = name
-    if description is not None:
-        data["description"] = description
-    if critical_product is not None:
-        data["critical_product"] = critical_product
-    if key_product is not None:
-        data["key_product"] = key_product
-    
-    result = await client.update_product_type(product_type_id, **data)
-
-    if "error" in result:
-        return {"status": "error", "error": result["error"], "details": result.get("details", "")}
-
-    return {"status": "success", "data": result}
+    return await client.update_product_type(product_type_id, data)
 
 async def delete_product_type(product_type_id: int) -> Dict[str, Any]:
     """Delete a product type by ID."""
@@ -82,10 +50,27 @@ async def delete_product_type(product_type_id: int) -> Dict[str, Any]:
     return {"status": "success", "data": result}
 
 
+async def run_product_type_pipeline(product_type_name:str) -> dict[str, Any]:
+    client = get_client()
+    summary ={}
+    pt_result = await  client.get_product_types({"name": product_type_name})
+    if "error" in pt_result:
+        return {"status": "error", "error": pt_result["error"], "details": pt_result.get("details", "")}
+    if pt_result.get("count", 0) > 0:
+        product_type_id = pt_result["results"][0]["id"]
+        summary["product_type"] = {"action": "reused", "id": product_type_id}
+    else:
+        created = await client.create_product_type(ProductType(name=product_type_name))
+        if "error" in created:
+            return {"status": "error", "error": created["error"], "details": created.get("details", "")}
+        product_type_id = created["id"]
+        summary["product_type"] = {"action": "created", "id": product_type_id}
+    return {"status": "success", "data": summary}
+    
 def register_tools(mcp):
     """Register product-related tools with the MCP server instance."""
-    mcp.tool(name="list_product_types", description="List all product types with pagination support")(list_product_types)
-    mcp.tool(name="create_product_type", description="Create a new product type")(create_product_type)
-    mcp.tool(name="get_product_type", description="Get a specific product type by ID")(get_product_type)
-    mcp.tool(name="update_product_type", description="Update an existing product type")(update_product_type)
-    mcp.tool(name="delete_product_type", description="Delete a product type by ID")(delete_product_type)
+    mcp.tool(name="list_product_types", description="List all product types ")(list_product_types)
+    mcp.tool(name="run_product_type_pipeline", description="Ensures a Product Type exists by name, creating it if necessary, and returns its details.")(run_product_type_pipeline)
+    mcp.tool(name="get_product_type", description="Retrieves the full details of a specific Product Type.")(get_product_type)
+    mcp.tool(name="update_product_type", description="Updates specific fields of an existing Product Type.")(update_product_type)
+    mcp.tool(name="delete_product_type", description="Deletes a specific Product Type.")(delete_product_type)
