@@ -1,0 +1,23 @@
+{
+  "scenario_id": "scenario_03",
+  "scenario_name": "Memory Test Across Turns",
+  "model": "qwen2.5:14b",
+  "timestamp": "2026-04-16T17:36:45.937371",
+  "turns": [
+    {
+      "turn": 1,
+      "user": "Product type is Web Application, product is FinanceHub.",
+      "agent": "I need the engagement details including start and end dates, test type, and finding information to proceed with the pipeline execution. Please provide these details."
+    },
+    {
+      "turn": 2,
+      "user": "I found an XSS vulnerability, Medium severity.",
+      "agent": "To complete the pipeline, I need more specific details such as the engagement target start and end dates, test type name, test target start and end dates, and the exact finding title and description for the XSS vulnerability. Please provide this information."
+    },
+    {
+      "turn": 3,
+      "user": "It was found by Bob, in the search bar.",
+      "agent": "I still need the engagement target start and end dates, test type name, test target start and end dates, and an exact date when the finding was discovered to proceed with the pipeline execution. Could you please provide these details? Additionally, if there's a specific test type or engagement description, please include that as well."
+    }
+  ]
+}

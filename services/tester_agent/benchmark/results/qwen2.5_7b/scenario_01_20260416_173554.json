@@ -1,0 +1,13 @@
+{
+  "scenario_id": "scenario_01",
+  "scenario_name": "Full Info Given At Once",
+  "model": "qwen2.5:7b",
+  "timestamp": "2026-04-16T17:35:45.826604",
+  "turns": [
+    {
+      "turn": 1,
+      "user": "Hey Ahmed here \u2014 identified a Critical issue in PayFlow (Finance web app, Q1 Security Audit Feb 1\u201328, 2025, DAST Feb 10\u201325) SQL Injection vulnerability in the login endpoint allows attackers to bypass authentication and access sensitive financial data. Please log it for Feb 15th.",
+      "agent": "Product description is missing. Here's an auto-generated concise description based on the provided information:\n\n\"PayFlow is a finance web application that handles sensitive financial data.\"\n\nWould you like to proceed with this description? If not, please provide a custom one."
+    }
+  ]
+}
