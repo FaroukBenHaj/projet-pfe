@@ -3,7 +3,9 @@ from langgraph.prebuilt import create_react_agent
 from langchain_ollama import ChatOllama
 from langchain_core.messages import HumanMessage, SystemMessage
 from config import settings
-from tools import AGENT_TOOLS as tools
+from gateway.tool_gateway import ToolGateway
+from gateway.mcp_client import MCPClient
+
 from prompt import SYSTEM_PROMPT
 from langgraph.checkpoint.memory import InMemorySaver
 
@@ -15,6 +17,9 @@ def get_agent():
         base_url=settings.ollama_base_url,
         temperature=0,
     )
+    mcp_client = MCPClient(settings.mcp_service_base_url)
+    tool_gateway = ToolGateway(mcp_client)
+    tools = build_tools(tool_gateway)
     return create_react_agent(
         model=llm,
         tools=tools,
@@ -35,3 +40,12 @@ def run(user_message: str , thread_id:str = "default") -> str:
 
     # Last message in the result is the final answer
     return result["messages"][-1].content
+
+
+def build_tools(tool_gateway):
+    return [
+        tool_gateway.create_finding,
+        tool_gateway.create_engagement,
+        tool_gateway.create_product,
+        tool_gateway.list_products,
+    ]

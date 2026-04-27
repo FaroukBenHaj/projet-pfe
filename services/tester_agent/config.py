@@ -16,5 +16,5 @@ class Settings(BaseSettings):
     # Agent behavior
     agent_max_iterations: int = 10
 
-
+    mcp_service_base_url: str = os.getenv("MCP_SERVICE_BASE_URL")
 settings = Settings()
