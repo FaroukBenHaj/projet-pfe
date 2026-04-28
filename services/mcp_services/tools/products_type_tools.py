@@ -1,7 +1,10 @@
 from typing import Any, Dict, Optional
 from client.dojoClient import get_client 
 from schemas.productType import ProductType, ProductTypeUpdate, ProductTypeResponse
+from fastapi import APIRouter
 
+router = APIRouter()
+@router.get("/product_types", summary="List all product types with pagination support")
 async def list_product_types(limit: int = 50, offset: int = 0) -> Dict[str, Any]:
     """List all product types with pagination.
 
@@ -24,6 +27,7 @@ async def list_product_types(limit: int = 50, offset: int = 0) -> Dict[str, Any]
 
     return {"status": "success", "data": result}
     
+@router.get("/product_types/{product_type_id}", summary="Get a specific product type by ID")
 async def get_product_type(product_type_id: int) -> Dict[str, Any]:
     """Get a specific product type by ID."""
     client = get_client()
@@ -33,12 +37,12 @@ async def get_product_type(product_type_id: int) -> Dict[str, Any]:
         return {"status": "error", "error": result["error"], "details": result.get("details", "")}
 
     return {"status": "success", "data": result}
-
+@router.put("/product_types/{product_type_id}", summary="Update an existing product type")
 async def update_product_type(product_type_id: int, data: ProductTypeUpdate) -> Dict[str, Any]:
     """Update an existing product type."""
     client = get_client()
     return await client.update_product_type(product_type_id, data)
-
+@router.delete("/product_types/{product_type_id}", summary="Delete a product type by ID")
 async def delete_product_type(product_type_id: int) -> Dict[str, Any]:
     """Delete a product type by ID."""
     client = get_client()
@@ -49,7 +53,7 @@ async def delete_product_type(product_type_id: int) -> Dict[str, Any]:
 
     return {"status": "success", "data": result}
 
-
+@router.post("/product_types/pipeline", summary="Ensures a Product Type exists by name, creating it if necessary, and returns its details.")
 async def run_product_type_pipeline(product_type_name:str) -> dict[str, Any]:
     client = get_client()
     summary ={}
@@ -67,10 +71,10 @@ async def run_product_type_pipeline(product_type_name:str) -> dict[str, Any]:
         summary["product_type"] = {"action": "created", "id": product_type_id}
     return {"status": "success", "data": summary}
     
-def register_tools(mcp):
-    """Register product-related tools with the MCP server instance."""
-    mcp.tool(name="list_product_types", description="List all product types ")(list_product_types)
-    mcp.tool(name="run_product_type_pipeline", description="Ensures a Product Type exists by name, creating it if necessary, and returns its details.")(run_product_type_pipeline)
-    mcp.tool(name="get_product_type", description="Retrieves the full details of a specific Product Type.")(get_product_type)
-    mcp.tool(name="update_product_type", description="Updates specific fields of an existing Product Type.")(update_product_type)
-    mcp.tool(name="delete_product_type", description="Deletes a specific Product Type.")(delete_product_type)
+# def register_tools(mcp):
+#     """Register product-related tools with the MCP server instance."""
+#     mcp.tool(name="list_product_types", description="List all product types ")(list_product_types)
+#     mcp.tool(name="run_product_type_pipeline", description="Ensures a Product Type exists by name, creating it if necessary, and returns its details.")(run_product_type_pipeline)
+#     mcp.tool(name="get_product_type", description="Retrieves the full details of a specific Product Type.")(get_product_type)
+#     mcp.tool(name="update_product_type", description="Updates specific fields of an existing Product Type.")(update_product_type)
+#     mcp.tool(name="delete_product_type", description="Deletes a specific Product Type.")(delete_product_type)

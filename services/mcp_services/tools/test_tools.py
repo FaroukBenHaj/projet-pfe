@@ -2,8 +2,12 @@ from typing import Any, Dict, Optional
 from client.dojoClient import get_client 
 from schemas.test import Test, TestUpdate
 import json 
-# --- Test Tool Definitions ---
 
+from fastapi import APIRouter
+
+router = APIRouter()
+# --- Test Tool Definitions ---
+@router.get("/tests", summary="List all Tests with optional filtering and pagination support")
 async def list_tests(limit: int = 50, offset: int = 0) -> Dict[str, Any]:
     filters = {"limit": limit}
     # Use __icontains for case-insensitive partial match if API supports it
@@ -17,6 +21,7 @@ async def list_tests(limit: int = 50, offset: int = 0) -> Dict[str, Any]:
 
     return {"status": "success", "data": result}
 
+@router.get("/tests/{test_id}", summary="Get a specific Test by ID")
 async def get_test(test_id: int) -> Dict[str, Any]:
     """Get a specific Test by ID."""
     client = get_client()
@@ -27,11 +32,13 @@ async def get_test(test_id: int) -> Dict[str, Any]:
 
     return {"status": "success", "data": result}
 
+@router.put("/tests/{test_id}", summary="Update an existing Test")
 async def update_test(test_id: int, data: TestUpdate) -> Dict[str, Any]:
     """Update an existing Test."""
     client = get_client()
     return await client.update_test(test_id, data)
 
+@router.delete("/tests/{test_id}", summary="Delete a Test by ID")
 async def delete_test(test_id: int) -> Dict[str, Any]:
     """Delete a Test by ID."""
     client = get_client()
@@ -40,7 +47,7 @@ async def delete_test(test_id: int) -> Dict[str, Any]:
     if "error" in result:
         return {"status": "error", "error": result["error"], "details": result.get("details", "")}
     return {"status": "success", "data": result}
-
+@router.post("/tests/pipeline", summary="Ensures a Test exists by title, creating it if necessary, and returns its details.")
 async def run_test_pipeline(engagement_id: int, test_data: Test) -> dict[str, Any]:
     client = get_client()
     summary ={}

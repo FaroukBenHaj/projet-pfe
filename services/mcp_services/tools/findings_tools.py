@@ -2,8 +2,11 @@ from typing import Any, Dict, Optional, List
 from client.dojoClient  import get_client
 from schemas.findings import Finding, FindingUpdate
 import json
-# --- finding Tool Definitions ---
+from fastapi import APIRouter
 
+router = APIRouter()
+# --- finding Tool Definitions ---
+@router.get("/findings", summary="List findings with optional filtering and pagination support")
 async def list_findings(limit: int = 20, offset: int = 0) -> Dict[str, Any]:
     filters = {"limit": limit}
     if offset:
@@ -16,6 +19,7 @@ async def list_findings(limit: int = 20, offset: int = 0) -> Dict[str, Any]:
 
     return {"status": "success", "data": result}
 
+@router.get("/findings/{finding_id}", summary="Get a specific finding by ID")
 async def get_finding(finding_id: int) -> Dict[str, Any]:
     client = get_client()
     result = await client.get_finding(finding_id)
@@ -25,6 +29,7 @@ async def get_finding(finding_id: int) -> Dict[str, Any]:
 
     return {"status": "success", "data": result}
 
+@router.put("/findings/{finding_id}", summary="Update an existing finding")
 async def update_finding(finding_id: int, data: FindingUpdate) -> Dict[str, Any]:
     client = get_client()
     result = await client.update_finding(finding_id, data)
@@ -32,6 +37,7 @@ async def update_finding(finding_id: int, data: FindingUpdate) -> Dict[str, Any]
         return {"status": "error", "error": result["error"], "details": result.get("details", "")}
     return {"status": "success", "data": result}
 
+@router.delete("/findings/{finding_id}", summary="Delete a finding")
 async def delete_finding(finding_id: int) -> Dict[str, Any]:
     client = get_client()
     result = await client.delete_finding(finding_id)
@@ -39,6 +45,7 @@ async def delete_finding(finding_id: int) -> Dict[str, Any]:
         return {"status": "error", "error": result["error"], "details": result.get("details", "")}
     return {"status": "success", "data": result}
 
+@router.post("/findings/pipeline", summary="Runs the finding pipeline for a given test and finding data.")
 async def run_finding_pipeline(test_id: int, finding_data: Finding) -> Dict[str, Any]:
     client = get_client()
     summary ={}

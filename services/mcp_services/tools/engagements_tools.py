@@ -2,8 +2,12 @@ from typing import Any, Dict, Optional, List
 from client.dojoClient  import get_client
 from schemas.engagements import Engagement, EngagementUpdate
 import json
+from fastapi import APIRouter
+
+router = APIRouter()
 # --- Engagement Tool Definitions ---
 
+@router.get("/engagements", summary="List engagements with optional filtering and pagination support")
 async def list_engagements(limit: int = 20, offset: int = 0) -> Dict[str, Any]:
     filters = {"limit": limit}
     if offset:
@@ -16,6 +20,7 @@ async def list_engagements(limit: int = 20, offset: int = 0) -> Dict[str, Any]:
 
     return {"status": "success", "data": result}
 
+@router.get("/engagements/{engagement_id}", summary="Get a specific engagement by ID")
 async def get_engagement(engagement_id: int) -> Dict[str, Any]:
     """Get a specific engagement by ID.
 
@@ -33,6 +38,7 @@ async def get_engagement(engagement_id: int) -> Dict[str, Any]:
 
     return {"status": "success", "data": result}
 
+@router.put("/engagements/{engagement_id}", summary="Update an existing engagement")
 async def update_engagement(engagement_id: int, data: EngagementUpdate) -> Dict[str, Any]:
     client = get_client()
     result = await client.update_engagement(engagement_id, data)
@@ -40,6 +46,7 @@ async def update_engagement(engagement_id: int, data: EngagementUpdate) -> Dict[
         return {"status": "error", "error": result["error"], "details": result.get("details", "")}
     return {"status": "success", "data": result}
 
+@router.delete("/engagements/{engagement_id}", summary="Delete an engagement")
 async def delete_engagement(engagement_id: int) -> Dict[str, Any]:
     client = get_client()
     result = await client.delete_engagement(engagement_id)
@@ -47,6 +54,7 @@ async def delete_engagement(engagement_id: int) -> Dict[str, Any]:
         return {"status": "error", "error": result["error"], "details": result.get("details", "")}
     return {"status": "success", "data": result}
 
+@router.post("/engagements/pipeline", summary="Runs the engagement pipeline for a given product and engagement data.")
 async def run_engagement_pipeline(product_id: int, engagement_data: Engagement) -> Dict[str, Any]:
     client = get_client()
     summary ={}

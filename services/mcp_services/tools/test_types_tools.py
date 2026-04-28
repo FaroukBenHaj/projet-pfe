@@ -2,8 +2,10 @@ from typing import Any, Dict, Optional
 from client.dojoClient import get_client 
 from schemas.test_type import TestType, TestTypeUpdate
 import json 
+from fastapi import APIRouter
 
-
+router = APIRouter()
+@router.get("/test_types", summary="List all Test Types with optional filtering and pagination support")
 async def list_test_types(limit: int = 50, offset: int = 0) -> Dict[str, Any]:
     filters = {"limit": limit}
     if offset:
@@ -16,6 +18,7 @@ async def list_test_types(limit: int = 50, offset: int = 0) -> Dict[str, Any]:
 
     return {"status": "success", "data": result}
 
+@router.get("/test_types/{test_type_id}", summary="Get a specific Test Type by ID")
 async def get_test_type(test_type_id: int) -> Dict[str, Any]:
     client = get_client()
     result = await client.get_test_type(test_type_id)
@@ -25,6 +28,7 @@ async def get_test_type(test_type_id: int) -> Dict[str, Any]:
 
     return {"status": "success", "data": result}
 
+@router.post("/test_types", summary="Create a new Test Type")
 async def create_test_type(test_type_data: TestType) -> Dict[str, Any]:
     client = get_client()
     result = await client.create_test_type(test_type_data)
@@ -34,6 +38,7 @@ async def create_test_type(test_type_data: TestType) -> Dict[str, Any]:
 
     return {"status": "success", "data": result}
 
+@router.post("/test_types/pipeline", summary="Ensures a Test Type exists by name, creating it if necessary, and returns its details.")
 async def run_test_type_pipeline(test_type_data: TestType) -> dict[str, Any]:
     client = get_client()
     summary ={}

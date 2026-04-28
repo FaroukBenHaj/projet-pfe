@@ -30,6 +30,7 @@ class DefectDojoClient:
         url = f"{self.base_url}{endpoint}"
         try:
             response = await self.client.request(method, url, params=params, json=json)
+            print(f"DEBUG (DojoClient): Received response text: {response.text}") # <--- THIS IS THE CRITICAL LINE
             response.raise_for_status()
             # Handle cases where response might be empty (e.g., 204 No Content)
             if response.status_code == 204:
@@ -77,7 +78,7 @@ class DefectDojoClient:
     
     async def create_product(self, data: Product) -> Dict[str, Any]:
         """Create a new product."""
-        return await self._request("POST", "/api/v2/products/", json=data.model_dump())
+        return await self._request("POST", "/api/v2/products/", json=data)
 
     async def update_product(self, product_id: int, data: ProductUpdate) -> Dict[str, Any]:
         """Update an existing product."""

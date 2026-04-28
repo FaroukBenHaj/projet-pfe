@@ -1,8 +1,11 @@
 from typing import Any, Dict, Optional
 from client.dojoClient import get_client 
 from schemas.product import Product, ProductUpdate
-# --- Product Tool Definitions ---
+from fastapi import APIRouter
 
+router = APIRouter()
+# --- Product Tool Definitions ---
+@router.get("/products", summary="List all products with optional filtering and pagination support")
 async def list_products(limit: int = 50, offset: int = 0) -> Dict[str, Any]:
     filters = {"limit": limit}
     # Use __icontains for case-insensitive partial match if API supports it
@@ -16,6 +19,7 @@ async def list_products(limit: int = 50, offset: int = 0) -> Dict[str, Any]:
 
     return {"status": "success", "data": result}
 
+@router.get("/products/{product_id}", summary="Get a specific product by ID")
 async def get_product(product_id: int) -> Dict[str, Any]:
     """Get a specific product by ID."""
     client = get_client()
@@ -26,11 +30,13 @@ async def get_product(product_id: int) -> Dict[str, Any]:
 
     return {"status": "success", "data": result}
 
+@router.put("/products/{product_id}", summary="Update an existing product")
 async def update_product(product_id: int, data: ProductUpdate) -> Dict[str, Any]:
     """Update an existing product."""
     client = get_client()
     return await client.update_product(product_id, data)
 
+@router.delete("/products/{product_id}", summary="Delete a product by ID")
 async def delete_product(product_id: int) -> Dict[str, Any]:
     """Delete a product by ID."""
     client = get_client()
@@ -40,7 +46,7 @@ async def delete_product(product_id: int) -> Dict[str, Any]:
         return {"status": "error", "error": result["error"], "details": result.get("details", "")}
     return {"status": "success", "data": result}
 
-
+@router.post("/get-or-create-product", summary="Ensures a Product exists by name, creating it if necessary, and returns its details.")
 async def run_product_pipeline(product_type_id: int, product_data: Product) -> dict[str, Any]:
     client = get_client()
     summary ={}
@@ -55,7 +61,6 @@ async def run_product_pipeline(product_type_id: int, product_data: Product) -> d
         create_payload = product_data.model_dump(exclude_none=True)
         create_payload["prod_type"] = product_type_id
         created = await client.create_product(create_payload)
-       
         if "error" in created:
             return {"status": "error", "step": "create_product", "error": created["error"]}
         product_id = created["id"]

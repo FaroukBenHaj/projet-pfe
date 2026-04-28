@@ -40,7 +40,7 @@ class Product(BaseModel):
     tags: Optional[list[str]]=[]
     prod_numeric_grade: Optional[int] = None
     user_records: Optional[int] = None
-    revenue: Optional[str]= None
+    revenue: Optional[float]= None
     external_audience: Optional[bool] = False
     internet_accessible: Optional[bool] = False
     enable_product_tag_inheritance: Optional[bool] = False
